@@ -4,7 +4,7 @@ It provides pre-trained Machine Learning models specifically fine-tuned to map w
 """
 from sentence_transformers import SentenceTransformer
 
-from loader import load_pdf, chunk_documents
+from processing.loader import load_pdf, chunk_documents
 
 """
 open-source model hosted on Hugging Face created by the Beijing Academy of Artificial Intelligence (BAAI).
