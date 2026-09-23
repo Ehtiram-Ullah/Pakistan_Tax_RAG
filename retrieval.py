@@ -4,7 +4,8 @@ from sentence_transformers import SentenceTransformer
 client = QdrantClient(path="storage/qdrant")
 model = SentenceTransformer("BAAI/bge-small-en-v1.5")
 
-
+def close():
+    client.close()
 def search(query,limit=5):
     query_embedding = model.encode(
         query,
@@ -30,3 +31,4 @@ if __name__ == "__main__":
         print("Page:", result.payload["page"])
         print("Text:")
         print(result.payload["text"])
+    close()
