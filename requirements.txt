@@ -1,0 +1,8 @@
+fastapi==0.142.2
+llama_index==0.14.25
+protobuf==7.36.2
+pydantic==2.13.5
+pymupdf==1.28.2
+python-dotenv==1.2.4
+qdrant_client==1.19.1
+sentence_transformers==6.1.0
