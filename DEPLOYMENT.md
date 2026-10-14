@@ -55,6 +55,10 @@ Gemini credits or change the database.
 - Root directory: the backend repository root (the folder containing this file).
 - Framework preset: FastAPI.
 - Python: 3.12, selected by `.python-version`.
+- Vercel resolves dependencies from the `[project]` table in `pyproject.toml`.
+  Its `tool.uv.sources` setting selects CPU-only PyTorch on Linux x86-64.
+  Commit `uv.lock` alongside the manifest so deployments use the tested resolution.
+  `requirements.txt` remains available for local pip-based setup.
 - Keep the install and build command overrides empty; the repository provides
   the build hook in `pyproject.toml`.
 - Enable Fluid compute / Active CPU. Set `VERCEL_SUPPORT_LARGE_FUNCTIONS=1`.
