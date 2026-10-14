@@ -1,0 +1,4 @@
+-r requirements.txt
+# Only needed locally to rebuild the corpus from PDFs.
+llama_index==0.14.25
+pymupdf==1.28.2

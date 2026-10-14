@@ -1,6 +1,8 @@
 # TaxLens API
 
-Evidence-grounded Pakistani tax legislation research, powered by local semantic retrieval and a configurable Gemini fallback chain.
+Evidence-grounded Pakistani tax legislation research, powered by PyTorch semantic retrieval, local or cloud Qdrant, and a configurable Gemini fallback chain.
+
+For the Vercel + Qdrant Cloud setup, follow [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Setup
 
@@ -26,7 +28,7 @@ Use **one worker** for the embedded Qdrant store. Do not run indexing and the AP
 
 ## Corpus
 
-The existing index is under `storage/qdrant`. To intentionally rebuild it from the PDFs in `data/raw`, stop the API first, then run:
+The existing index is under `storage/qdrant`. To intentionally rebuild it from the PDFs in `data/raw`, stop the API first, install `requirements-indexing.txt`, then run:
 
 ```sh
 python -m storage.qdrant.vector_store
@@ -34,7 +36,7 @@ python -m storage.qdrant.vector_store
 
 This existing index builder replaces the collection. Confirm the source documents first. Document filenames do not prove currency; verify effective dates, amendments, and the relevant tax year against original publications.
 
-`QDRANT_PATH` optionally sets a different database location for the API. The default path resolves relative to the backend module, not the working directory. The existing index builder uses `storage/qdrant` relative to its working directory.
+Set `QDRANT_URL` and `QDRANT_API_KEY` for cloud retrieval. With both absent, `QDRANT_PATH` optionally sets a different local database location. Vercel requires cloud credentials and never silently creates an empty local index. The default local path resolves relative to the backend module. The existing index builder only modifies `storage/qdrant` relative to its working directory; it does not write to cloud.
 
 ## API
 

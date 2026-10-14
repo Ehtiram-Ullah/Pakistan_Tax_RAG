@@ -1,10 +1,11 @@
 fastapi==0.142.2
-llama_index==0.14.25
-protobuf==7.36.2
 pydantic==2.13.5
-pymupdf==1.28.2
 python-dotenv==1.2.4
 qdrant_client==1.19.1
 sentence_transformers==6.1.0
 google-genai==2.28.0
 uvicorn[standard]==0.54.0
+huggingface-hub==1.33.0
+# Linux/Python 3.12 production uses CPU-only PyTorch, without CUDA packages.
+torch @ https://download.pytorch.org/whl/cpu/torch-2.14.1%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl ; sys_platform == "linux" and python_version == "3.12" and platform_machine == "x86_64"
+torch==2.14.1 ; sys_platform != "linux" or python_version != "3.12" or platform_machine != "x86_64"

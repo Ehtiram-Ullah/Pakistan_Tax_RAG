@@ -218,3 +218,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local credentials, generated model assets and corpus database
+.env.*
+!.env.example
+models/
+.vercel/
+storage/qdrant/collection/
+storage/qdrant/meta.json
+storage/qdrant/.lock

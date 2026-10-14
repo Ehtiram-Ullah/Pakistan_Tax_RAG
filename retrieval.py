@@ -1,9 +1,8 @@
-"""Reuse retrieval resources; serialize access to the embedded Qdrant store."""
+"""Reuse CPU PyTorch embeddings and either cloud or local Qdrant."""
 import os
-from pathlib import Path
 from threading import RLock
+from settings import COLLECTION_NAME, MODEL_DIR, MODEL_ID, MODEL_REVISION, create_qdrant_client
 
-COLLECTION_NAME = "pakistan_tax_law"
 _lock = RLock()
 _client = None
 _model = None
@@ -11,17 +10,27 @@ _model = None
 
 def search(query, limit=5):
     global _client, _model
-    from qdrant_client import QdrantClient
-    from sentence_transformers import SentenceTransformer
-
     with _lock:
         if _client is None:
-            path = os.getenv("QDRANT_PATH", str(Path(__file__).resolve().parent / "storage" / "qdrant"))
-            _client = QdrantClient(path=path)
+            _client = create_qdrant_client()
         if _model is None:
-            _model = SentenceTransformer("BAAI/bge-small-en-v1.5")
+            _model = load_model()
         embedding = _model.encode(query, normalize_embeddings=True).tolist()
         return _client.query_points(collection_name=COLLECTION_NAME, query=embedding, limit=limit).points
+
+
+def load_model():
+    # Avoid excessive CPU threads on the one-vCPU deployment.
+    os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+    from sentence_transformers import SentenceTransformer
+    import torch
+
+    torch.set_num_threads(1)
+    if MODEL_DIR.is_dir():
+        return SentenceTransformer(str(MODEL_DIR), device="cpu", local_files_only=True)
+    if os.getenv("VERCEL"):
+        raise RuntimeError("Bundled embedding model is missing. Run the model preparation build step.")
+    return SentenceTransformer(MODEL_ID, revision=MODEL_REVISION, device="cpu")
 
 
 def close_resources():

@@ -1,0 +1,11 @@
+.env
+.env.*
+.venv/
+.git/
+data/
+storage/
+processing/
+evaluatoin/
+tests/
+models/
+**/__pycache__/
